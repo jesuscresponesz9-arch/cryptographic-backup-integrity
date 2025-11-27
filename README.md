@@ -3,6 +3,45 @@
 ## Descripción
 Implementación de un **sistema de verificación criptográfica independiente** usando **SHA-256 y GPG para garantizar autenticidad e integridad de backups** en entornos de alta seguridad.
 
+## 🚨 Problema que Resuelve
+
+En entornos empresariales, los backups son el último recurso ante desastres, pero ¿qué pasa cuando el propio backup está comprometido? 
+
+**Escenarios críticos que este sistema previene:**
+- Un atacante modifica tu backup y tú restauras datos corruptos sin saberlo
+- Corrupción silenciosa durante transferencia o almacenamiento
+- Empleados malintencionados alteran respaldos críticos
+- Software malicioso cifra tus backups y exige rescate
+- Errores de almacenamiento que corrompen archivos gradualmente
+
+**El problema raíz:** La mayoría de sistemas confían ciegamente en que el backup no fue alterado después de su creación.
+
+---
+
+## 🎯 Casos de Uso y Aplicaciones
+
+### 🔐 Entornos Financieros
+- **Bancos y fintech**: Verificación de respaldos de transacciones y datos de clientes
+- **Auditoría regulatoria**: Evidencia criptográfica para cumplimiento (SOX, PCI-DSS)
+
+### 🏥 Sector Salud
+- **Historias médicas**: Garantizar integridad de datos de pacientes
+- **Investigación clínica**: Proteger datos de estudios médicos de alteraciones
+
+### ⚖️ Legal y Forense
+- **Evidencia digital**: Cadena de custodia criptográfica para pruebas
+- **Documentos legales**: Integridad verificable de contratos y archivos
+
+### 🔧 DevOps y Infraestructura
+- **Backups de configuración**: Verificar que configuraciones de servidores no fueron alteradas
+- **Recuperación de desastres**: Certeza de que los backups son confiables
+
+### 🌐 Almacenamiento en Cloud
+- **S3/Cloud Storage**: Detectar si objetos fueron modificados externamente
+- **Multi-nube**: Verificación consistente entre diferentes proveedores
+
+---
+
 ## Características Principales 🛡️
 
 - **Arquitectura Producer/Auditor** 🏗️ - Separación completa entre generación y verificación
