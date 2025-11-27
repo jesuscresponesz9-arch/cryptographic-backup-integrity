@@ -72,6 +72,26 @@ Este patrón ofrece:
 
 Es el mismo enfoque utilizado en seguridad industrial y procesos de integridad digital.
 
+## 🚀 Cómo Se Usa
+
+### Crear un Backup
+```bash
+./backup_seguro.sh /ruta/a/tus/datos
+```
+
+### Verificar un Backup  
+```bash
+./verificador_backup.sh backup_2024-01-01_120000.tar.gz
+```
+
+### Salida del Verificador
+```
+=== VERIFICACIÓN CRIPTOGRÁFICA ===
+✅ INTEGRIDAD: SHA-256 válido
+✅ AUTENTICIDAD: Firma GPG verificada
+=== RESULTADO: BACKUP CONFIABLE ===
+```
+
 ## 🧪 Pruebas Realizadas
 
 Se validaron los tres ataques principales que afectan a sistemas reales:
@@ -106,7 +126,7 @@ La arquitectura demuestra capacidad para identificar:
 - Validación del emisor
 - Resultado final claro (OK/FAIL)
 
-## 🚀 Casos de Uso
+## 🎯 Casos de Uso
 
 - Entornos regulados: auditoría reproducible.
 - Infraestructura crítica: detección temprana de corrupción.
@@ -120,3 +140,7 @@ La arquitectura demuestra capacidad para identificar:
 - bash
 - tar, sha256sum
 - gpg correctamente configurado
+
+---
+
+**📄 Licencia:** MIT
