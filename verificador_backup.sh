@@ -5,7 +5,7 @@
      5  # ==============================================================================
      6
      7  BACKUP="$1"
-     8  EMISOR_ESPERADO="jesus.cresponesz9@gmail.com"
+     8  EMISOR_ESPERADO="hostname@gmail.com"  
      9
     10  # --- VERIFICACIONES INICIALES ---
     11  if [ -z "$BACKUP" ]; then
