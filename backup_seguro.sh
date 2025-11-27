@@ -8,7 +8,7 @@
      8  # --- CONFIGURACIÓN (Actualizada con tus datos reales) ---
      9  ORIGEN="/home/linux/datos_criticos"           # TU directorio real
     10  DESTINO="/home/linux/backups_seguros"         # Donde guardar backups
-    11  GPG_USER="jesus.cresponesz9@gmail.com"        # TU email GPG real
+    11  GPG_USER="hostname@gmail.com"                  # TU email GPG real
     12  FECHA=$(date +%Y-%m-%d_%H%M%S)
     13  NOMBRE_ARCHIVO="backup_$FECHA.tar.gz"
     14  RUTA_FINAL="$DESTINO/$NOMBRE_ARCHIVO"
