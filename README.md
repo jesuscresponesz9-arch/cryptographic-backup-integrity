@@ -194,13 +194,7 @@ sha256sum -c → gpg --verify → verificación_emisor → reporte
 ├── verificador_backup.sh     # Auditor
 └── README.md
 
-~/backups_seguros/
-├── backup_2025-11-26_191454.tar.gz
-├── backup_2025-11-26_191454.tar.gz.sha256
-├── backup_2025-11-26_191454.tar.gz.asc
-└── backup_log.txt
 ```
-
 ---
 
 ## 📘 **Requisitos**
