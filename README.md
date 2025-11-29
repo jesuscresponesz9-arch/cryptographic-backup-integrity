@@ -1,211 +1,160 @@
-🔐 **Cryptographic Backup Verification System**  
-**Arquitectura Producer/Auditor con SHA-256 y GPG para integridad verificable en sistemas críticos**
+# 🔐 Sistema de Auditoría Criptográfica de Backup
 
----
+## 🏛️ **Arquitectura Productor-Auditor con SHA-256 y GPG para Integridad Inquebrantable**
 
-## 🧩 **Descripción General**
+-----
 
-Este proyecto implementa un sistema de respaldo diseñado para entornos donde la **integridad, autenticidad y confiabilidad** de los datos son requisitos obligatorios.
+## 🎯 **Descripción General**
 
-En lugar de utilizar un único script que crea y verifica sus propios archivos —un enfoque débil y propenso a errores— el sistema adopta una **arquitectura profesional basada en separación de responsabilidades**:
+Este proyecto implementa un sistema de respaldo diseñado para entornos donde la **integridad, autenticidad y confiabilidad** de los datos son requisitos obligatorios y no negociables.
 
-- **Producer** (`backup_seguro.sh`): crea backups íntegros y firmados
-- **Auditor** (`verificador_backup.sh`): verifica cualquier backup, sin confiar en su origen
+En lugar de depender de un único *script* con permisos amplios (un enfoque frágil), el sistema adopta una **arquitectura de seguridad profesional basada en Separación de Responsabilidades y Mínimo Privilegio**:
 
-Este modelo reproduce prácticas utilizadas en sectores como **banca, telecomunicaciones, infraestructuras críticas y cumplimiento normativo**.
+  * **Producer** (`backup_seguro.sh`): Crea *backups* íntegros y firmados.
+  * **Auditor** (`verificador_backup.sh`): Verifica cualquier *backup*, **sin tener permisos para modificarlo o confiar en su origen**.
 
----
+Este modelo reproduce prácticas utilizadas en **banca, telecomunicaciones, infraestructuras críticas y cumplimiento normativo**.
 
-## 🚨 **Problema que Resuelve**
+-----
 
-Los sistemas de backup tradicionales asumen que:
-- El entorno que genera el backup es confiable
-- El archivo no será manipulado  
-- El proceso de verificación puede ser realizado por la misma herramienta que lo creó
+## 🚨 **Problema Crítico que Resuelve**
 
-En **escenarios reales**, estas suposiciones fallan:
-- **Corrupción silenciosa**: cambios mínimos pasan desapercibidos
-- **Manipulación maliciosa**: un atacante altera un backup sin ser detectado
-- **Auto-verificación peligrosa**: un script no puede auditarse a sí mismo
+Los sistemas de *backup* tradicionales asumen confiabilidad. **En escenarios reales, esto es un riesgo:**
 
-El resultado: los equipos creen tener un backup válido… **hasta que lo necesitan**.
+  * **Corrupción Silenciosa**: Fallos de *hardware* o *software* que alteran datos sin notificación.
+  * **Manipulación Maliciosa**: Un atacante altera un *backup* o intenta que el sistema **re-firme un archivo comprometido**.
+  * **Auto-Verificación Peligrosa**: Un *script* no puede auditarse a sí mismo de manera segura.
 
----
+El resultado: la creencia de tener un *backup* válido se mantiene... **hasta que ocurre el desastre.**
 
-## 🏛️ **Arquitectura de la Solución**
+-----
 
-El sistema se divide en **dos componentes totalmente independientes**:
+## ⚙️ **Arquitectura de la Solución: Separación de Privilegios**
 
-### 🔐 **1. Producer — `backup_seguro.sh`**
-El Producer es responsable de crear los respaldos con **garantías criptográficas inherentes**.
+El sistema se divide en **dos componentes con permisos totalmente segregados** a nivel de sistema operativo:
 
-**Funciones principales:**
-- Genera un backup comprimido (`tar.gz`)
-- Calcula un hash **SHA-256** 
-- Firma digitalmente el backup usando **GPG**
-- **Verifica su propia salida** antes de entregarla
-- Produce artefactos acompañados de **evidencia verificable**
+### 🏭 **1. Producer — `backup_seguro.sh`**
 
-**Responsabilidad clave:** *"El backup nace íntegro y auténtico."*
+El Producer es el **generador de artefactos** con garantías criptográficas inherentes.
 
-### 🔍 **2. Auditor — `verificador_backup.sh`** 
-El Auditor es **totalmente independiente** del Producer y valida **cualquier respaldo**.
+**Responsabilidad clave:** ***"El backup nace íntegro y auténtico."***
 
-**Funciones principales:**
-- Verifica integridad mediante **SHA-256**
-- Verifica autenticidad mediante **firma GPG** (`.asc`)
-- **Identifica al emisor real** y detecta suplantación
-- Reporta corrupción, manipulación o discrepancias
-- **No modifica nada**: auditoría pura
+  * Genera un *backup* comprimido (`tar.gz`).
+  * Calcula el **Hash SHA-256**.
+  * Firma digitalmente el *backup* usando **GPG**.
+  * Produce artefactos acompañados de **evidencia verificable**.
 
-**Responsabilidad clave:** *"Verifico, sin confiar en ningún origen."*
+### 🕵️ **2. Auditor — `verificador_backup.sh`**
 
----
+El Auditor es **imparcial y carece de la capacidad de escritura** (`w`) sobre los archivos de *backup*.
+
+**Responsabilidad clave:** ***"Verifico la verdad, sin confianza ni capacidad de modificación."***
+
+  * Verifica integridad mediante **SHA-256**.
+  * Verifica autenticidad mediante **firma GPG** (`.asc`).
+  * **Identifica al emisor real** y detecta suplantación.
+  * Reporta corrupción o discrepancias.
+
+-----
 
 ## 🔄 **Sinergia Operativa**
 
-La fortaleza del sistema está en la **combinación**:
-- **Producer**: fabrica respaldos confiables
-- **Auditor**: valida respaldos en **cualquier contexto**
+La fortaleza del sistema está en la **implementación de permisos Unix (rwx)**:
 
-Este patrón ofrece:
-- **Auditoría imparcial**
-- **Evidencia criptográfica independiente**
-- **Detección de manipulación maliciosa**
-- **Trazabilidad reproducible**
-- **Confiabilidad** incluso en ambientes comprometidos
+  * **El Producer tiene la `w` (escritura):** Puede crear los *backups*.
+  * **El Auditor SOLO tiene la `r` (lectura):** Puede verificar los datos, pero no puede ser usado para **re-firmar un archivo malicioso**.
 
-Es el mismo enfoque utilizado en **seguridad industrial** y procesos de integridad digital.
+Este patrón ofrece: **Auditoría Imparcial** | **Detección de Manipulación** | **Trazabilidad Criptográfica**
 
----
+-----
 
 ## 🚀 **Cómo Se Usa**
 
 ### **Crear un Backup**
+
 ```bash
 ./backup_seguro.sh
 ```
 
 ### **Verificar un Backup**
+
 ```bash
 # Verificación básica (solo firma válida)
 ./verificador_backup.sh backup_2025-11-26_191454.tar.gz
 
-# Verificación con emisor específico  
+# Verificación con emisor específico (recomendado)
 ./verificador_backup.sh backup_2025-11-26_191454.tar.gz jesus.cresponesz9@gmail.com
 ```
 
-### **Salida del Verificador**
+### **Salida del Verificador (Ejemplo)**
+
 ```
 === VERIFICANDO BACKUP: backup_2025-11-26_191454.tar.gz ===
 1. 🔍 Verificando INTEGRIDAD (SHA256)...
-   ✅ INTEGRIDAD CONFIRMADA: Archivo no corrupto
+    ✅ INTEGRIDAD CONFIRMADA: Archivo no corrupto
 2. 🔐 Verificando AUTENTICIDAD (GPG)...
-   ✅ FIRMA VÁLIDA: Firma criptográfica correcta
-   ✅ EMISOR VERIFICADO: jesus.cresponesz9@gmail.com
+    ✅ FIRMA VÁLIDA: Firma criptográfica correcta
+    ✅ EMISOR VERIFICADO: jesus.cresponesz9@gmail.com
 
 === 📊 RESULTADO FINAL ===
 🎉 BACKUP VERIFICADO: Íntegro y auténtico
 ```
 
----
+-----
 
-## 🧪 **Pruebas Realizadas**
+## 🧪 **Pruebas de Estrés y Validación**
 
-Se validaron los **tres ataques principales** que afectan a sistemas reales:
+El diseño fue validado exitosamente contra los **tres ataques principales** que comprometen la integridad de datos:
 
-### **1. Corrupción de Datos**
-```bash
-echo "DATOS_CORRUPTOS" >> backup.tar.gz
-```
-**Resultado:** ✅ **Detectado correctamente** - Hash SHA256 inválido
+| Ataque Simulado | Método de Detección | Resultado |
+| :--- | :--- | :--- |
+| **1. Corrupción de Datos** (Fallo Aleatorio) | Hash SHA256 inválido | ✅ **Detectado correctamente** |
+| **2. Suplantación de Identidad** (Clave Adversaria) | Emisor GPG incorrecto | ✅ **Detectado correctamente** |
+| **3. Manipulación Lógica** (Modificación + Recálculo) | Firma GPG y Permisos Unix | ✅ **Detectado correctamente** |
 
-### **2. Suplantación de Identidad**
-```bash
-# Firma con clave adversaria
-gpg --local-user "hacker@evil.com" --detach-sign backup.tar.gz
-```
-**Resultado:** ✅ **Detectado correctamente** - Emisor incorrecto identificado
+-----
 
-### **3. Ataque Man-in-the-Middle**
-```bash
-# Modificación + recálculo de hash (sin firma válida)
-```
-**Resultado:** ✅ **Detectado correctamente** - Firma GPG inválida
+## 🎯 **Casos de Uso Empresariales**
 
-La arquitectura demuestra capacidad para identificar:
-- **Corrupción accidental**
-- **Manipulación maliciosa** 
-- **Suplantación criptográfica**
+  * **Entornos Regulados**: Necesidad de auditoría reproducible (SOX/HIPAA).
+  * **Infraestructura Crítica**: Detección temprana de corrupción en *storages*.
+  * **Recuperación ante Desastres**: Validación de la integridad antes de cualquier restauración.
+  * **Forensic Readiness**: Generación de evidencia criptográfica inmutable.
 
----
-
-## 📂 **Salidas del Sistema**
-
-### **El Producer genera:**
-- `backup_FECHA.tar.gz` (datos comprimidos)
-- `backup_FECHA.tar.gz.sha256` (hash de integridad)
-- `backup_FECHA.tar.gz.asc` (firma GPG)
-- `backup_log.txt` (logs con trazabilidad completa)
-
-### **El Auditor proporciona:**
-- **Reporte de integridad** (SHA256)
-- **Validación del emisor** (GPG issuer)
-- **Resultado final claro** (OK/FAIL)
-- **Diagnóstico específico** de fallos
-
----
-
-## 🎯 **Casos de Uso**
-
-- **Entornos regulados**: auditoría reproducible para SOX/HIPAA
-- **Infraestructura crítica**: detección temprana de corrupción
-- **Recuperación ante desastres**: validar antes de restaurar
-- **Equipos distribuidos**: verificar backups de múltiples administradores
-- **Cadenas de suministro digital**: autenticidad garantizada
-- **Forensic readiness**: evidencia criptográfica para investigaciones
-
----
+-----
 
 ## 🔧 **Implementación Técnica**
 
-### **Flujo del Producer:**
-```bash
-tar → sha256sum → gpg → auto-validación → entrega
-```
+### **Flujo Principal:**
 
-### **Flujo del Auditor:**
-```bash
-sha256sum -c → gpg --verify → verificación_emisor → reporte
-```
+  * **Producer:** `tar` → `sha256sum` → `gpg` → `auto-validación` → `entrega`
+  * **Auditor:** `sha256sum -c` → `gpg --verify` → `verificación_emisor` → `reporte`
 
 ### **Características de Seguridad:**
-- **SHA-256**: Resistencia a colisiones (2¹²⁸ operaciones)
-- **GPG-RSA-2048**: Resistencia (2¹¹² operaciones)
-- **Verificación en tiempo real**: sub-segundos
-- **Zero trust**: No asume confianza en el origen
 
----
+  * **Segregación de Permisos:** Evidencia en la estructura de permisos (`ls -l`).
+  * **Criptografía:** SHA-256 (Hash) y GPG-RSA-2048 (Firma).
+  * **Zero Trust:** El Auditor no asume la confiabilidad de ningún origen.
 
-## 📦 **Estructura del Proyecto**
-```
-~/scripts/
-├── backup_seguro.sh          # Producer
-├── verificador_backup.sh     # Auditor
-└── README.md
+-----
+
+## 📂 **Estructura del Proyecto**
+
+**[¡AQUÍ VA LA CAPTURA DE PANTALLA CON EL `ls -l` MOSTRANDO LOS PERMISOS\!]**
 
 ```
----
+/cryptographic-backup-system/
+├── LICENSE
+├── README.md
+├── backup_seguro.sh
+└── verificador_backup.sh
+```
+
+-----
 
 ## 📘 **Requisitos**
 
-- **GNU/Linux** (Debian, Ubuntu, RHEL, etc.)
-- **bash** 4.0+
-- **coreutils**: tar, sha256sum
-- **gnupg2** correctamente configurado
-- **Sistema de archivos** con soporte para permisos Unix
-
----
-
-## 📄 **Licencia**
-**MIT License** - Libre uso, modificación y distribución para fines comerciales y personales.
+  * **GNU/Linux** (bash 4.0+)
+  * **coreutils** (`tar`, `sha256sum`)
+  * **gnupg2** (Configurado con las claves necesarias)
+  * **Sistema de archivos** con soporte para permisos Unix.
