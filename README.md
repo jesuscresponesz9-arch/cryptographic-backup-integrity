@@ -140,8 +140,6 @@ El diseño fue validado exitosamente contra los **tres ataques principales** que
 
 ## 📂 **Estructura del Proyecto**
 
-**[¡AQUÍ VA LA CAPTURA DE PANTALLA CON EL `ls -l` MOSTRANDO LOS PERMISOS\!]**
-
 ```
 /cryptographic-backup-system/
 ├── LICENSE
